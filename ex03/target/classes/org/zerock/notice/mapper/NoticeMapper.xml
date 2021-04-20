@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.zerock.notice.mapper.NoticeMapper">
+
+	<select id="list" resultType="org.zerock.notice.vo.NoticeVO">
+		SELECT rnum, no, title, startDate, endDate, writeDate, updateDate
+		FROM(
+			SELECT rownum rnum, no, title, startDate, endDate, writeDate, updateDate
+			FROM(
+				SELECT no, title, startDate, endDate, writeDate, updateDate
+				FROM notice
+				<include refid="search"/>
+				ORDER BY no DESC
+			)
+		)
+		WHERE rnum BETWEEN #{startRow} AND #{endRow}
+	</select>
+	
+	<select id="getTotalRow" resultType="java.lang.Long">
+		SELECT count(*) FROM notice
+		<include refid="search"/>
+	</select>
+	
+	<sql id="search">
+		<if test="word != null and word != ''">
+			WHERE 1 = 0
+			<if test="key == 't'.toString()">
+				OR title like '%' || #{word} || '%'
+			</if>
+			<if test="key == 'c'.toString()">
+				OR content like '%' || #{word} || '%'
+			</if>
+			<if test="key == 's'.toString()">
+				OR wtartDate like '%' || #{word} || '%'
+			</if>
+			<if test="key == 'e'.toString()">
+				OR endDate like '%' || #{word} '%'
+			</if>
+			<if test="key == 'tc'.toString()">
+				OR title like '%' || #{word} '%'
+				OR content like '%' || #{word} '%'
+			</if>
+		</if>
+	</sql>
+
+	<insert id="write">
+		INSERT INTO notice(no, title, content, startDate, endDate)
+		VALUES(notice_seq.NEXTVAL, #{title}, #{content}, #{startDate}, #{endDate})
+	</insert>
+	
+	<update id="update">
+		UPDATE notice SET title = #{title}, content = #{content}, startDate = #{startDate}, endDate = #{endDate}, writeDate = #{writeDate}
+		WHERE no = #{no}
+	</update>
+
+	<delete id="delete">
+		DELETE FROM notice
+		WHERE no = #{no}
+	</delete>
+
+</mapper>
