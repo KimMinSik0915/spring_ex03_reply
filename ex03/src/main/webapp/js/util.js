@@ -22,12 +22,18 @@
 }
 
 // 날짜 객체를 시간 문자열로 구분하는 함수 - dateToTimeStr
- function dateToTimeStr(date, sep) {
+// java 코드에서 java.util.Date 객체를 사용해야 한다.
+// java 코드에서 java.sql.Date 객체를 사용하게 되면, 날짜는 있지만 시간이 없다.(날짜만 처리하게 된다)
+ function dateToTimeStr(date) {
 	
 	// date는 반드시 Date 객체 이어야 한다.
 	
+	// 날짜를 찍어서 확인했을 때 숫자는 나오는데 ~~~~,000 : 시간 정보가 포함되어 있지 않다.
+	// Oracle DB : SELECT TO_CHAR(writeDate, 'hh:mi:ss') writeDate FROM board_reply 찍어서 확인해 보기
+	// Java 코드 확인 return service.list()
+	
 	var hh = date.getHours();
-	var mi =  date.getMinutes() + 1;	// month는 0부터 11까지 사용한다.
+	var mi =  date.getMinutes();	// month는 0부터 11까지 사용한다.
 	var ss = date.getSeconds();
 	
 	
@@ -52,12 +58,17 @@
 
 // 날짜 data를 timestemp라는 long 타입의 긴 숫자를 받아서 날짜 계산에 의해 현재 시간 기준으로 24시간이 지났으면 날짜를 표시 그렇지 않으면 숫자 문자열을 돌려주는 함수
 function displayTime(timeStemp) {
+
+	console.log(timeStemp);
 	
 	// 오늘 날짜 객체 만들기
 	var today = new Date();
 	
 	// 오늘 날짜 TimeStamp에서 비교해야 할 날짜의 TimeStamp를 빼기
-	var gap = today.getTime - timeStemp;
+	var gap = today.getTime() - timeStemp;
+
+	console.log(gap);
+	
 	
 	if(gap < (1000 * 60 * 60 * 24)) {		// 작성한 날자가 24시간이 지나지 않았으면 시간을, 지났으면 날짜를 문자열로 리턴한다.
 		

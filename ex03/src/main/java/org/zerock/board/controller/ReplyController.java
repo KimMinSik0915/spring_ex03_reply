@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -55,16 +56,14 @@ public class ReplyController {
 	// 3. 게시판 등록 FORM : /board/view에 포함
 	
 	// 3-1 게시판 등록 처리
-	@PostMapping("/write")
-	public String write(ReplyVO vo, RedirectAttributes rttr, int perPageNum) throws Exception {
+	@PostMapping(value = "/write", consumes = { MediaType.APPLICATION_JSON_UTF8_VALUE }, produces = { "application/text; charset=utf-8" })
+	public ResponseEntity<String> write( @RequestBody ReplyVO vo) throws Exception {
 		
 		log.info(vo + " write()-------------------------------");
 		
 		service.write(vo);
 		
-		rttr.addFlashAttribute("msg", "게시판 글 등록이 완료되었습니다.");
-		
-		return "redirect:list.do?perPageNum=" + perPageNum;
+		return new ResponseEntity<String>("댓글이 등록되었습니다" , HttpStatus.OK);
 		
 	}
 	

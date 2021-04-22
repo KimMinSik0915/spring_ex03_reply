@@ -31,7 +31,7 @@
 	
 	<!-- 3. 게시판 글 쓰기 -->
 	<insert id="write">
-		INSERT INTO board_erply(rno, no, content, writer, pw)
+		INSERT INTO board_reply(rno, no, content, writer, pw)
 		VALUES(board_reply_seq.NEXTVAL, #{no}, #{content}, #{writer}, #{pw})
 	</insert>
 

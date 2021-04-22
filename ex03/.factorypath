@@ -19,7 +19,7 @@
     <factorypathentry kind="VARJAR" id="M2_REPO/javax/servlet/jstl/1.2/jstl-1.2.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/org/springframework/spring-test/5.0.7.RELEASE/spring-test-5.0.7.RELEASE.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/org/projectlombok/lombok/1.18.20/lombok-1.18.20.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="EXTJAR" id="D:\MinSik\WorkSpace\spring\spring_ex03_reply\ex03\src\main\webapp\WEB-INF\lib\pageObject.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="EXTJAR" id="D:\MS\workspace\Spring\spring_ex03_reply\ex03\src\main\webapp\WEB-INF\lib\pageObject.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/com/oracle/database/jdbc/ojdbc6/11.2.0.4/ojdbc6-11.2.0.4.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/com/oracle/database/jdbc/ucp/11.2.0.4/ucp-11.2.0.4.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/com/oracle/database/security/oraclepki/11.2.0.4/oraclepki-11.2.0.4.jar" enabled="true" runInBatchMode="false"/>

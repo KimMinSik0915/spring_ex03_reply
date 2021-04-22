@@ -37,9 +37,9 @@
 		
 		${(empty msg)?"":"alert('" += msg += "')"}
 		
-//  		$(document).keydown(function (e) {
+//  		$(document).keydown(function (e) {		// F5m ctrl + F5, ctrl + r(새로고침) 막기
 		    
-// 		    if (e.which === 116) {
+// 		    if (e.which === 116) {				
 		    	
 // 		        if (typeof event == "object") {
 		        	
@@ -80,12 +80,12 @@
 		
 		//alert('test');
 		
-		// 댓글보기
+		// 글 보기를 하면 바로 댓글 리스트 호출
 		showList();
 		
 		
 		// function showList() - no, page, perPageNum : 전역 변수로 선언되어 있으므로 변수명 사용
-		function showList() {
+		function showList() { 
 			
 			replyService.list({no:no, repPage:repPage, repPerPageNum:repPerPageNum}, 	// 서버에 넘겨줄 data
 					// 성공했을 때의 함수 = data라는 이름으로 list가 들어온다.
@@ -113,11 +113,13 @@
 								console.log(list[i]);
 								
 								// tag 만들기 : 데이터 한개당 li tag 하나가 생긴다.
+						      	//  데이터가 있는 만큼 반복처리 (li태그 만들어 내기)
+      							// rno를 표시하지 않고 태그안에 속성으로 숨겨 놓음 data-rno="12"
 								str += "<li class='let clearfix' data-rno='" + list[i].rno + "'>";
 						        str += "<div>";
 						        str +=  "<div class='header'>";
 						        str += "<strong class='primary-font'>" + list[i].writer + "</strong>";
-						        str +=  "<small class='pull-right text-muted' >"+ replyService.displayTime(list[i].writeDate) + "</small>";
+						        str +=  "<small class='pull-right text-muted' >"+ replyService.displayTime(list[i].writeDate) + "</small>";		// class=muted : 글자색을 회색으로 만들어 주는 BS, CSS
 						        str += "</div>";
 						        str += "<p><pre style='background: none;'>" + list[i].content + "</pre></p>";
 						        str += "</div>";
@@ -127,13 +129,65 @@
 						
 						}
 						
-						replyUL.html(str);
+						replyUL.html(str);		// .HTML(str) : str을 HTML태그로 만들어 준다.
 							
-					});	// 실패시 함수는 생략 가능하다.
+					});	// 실패시 함수는 생략 가능하다.  
 					
-		}
+		}	// end of showList()
 		
-	});
+		// 댓글 모달창 전역변수 지정
+		var replyModal = $("#replyModal");
+		
+		// 댓글 등록 버튼 이벤트 처리 : 댓글의 모달창 정보 수정 및 보이기
+		$("#writeReplyBtn").click(function() {
+			
+			// alert('댓들 등록');
+
+			// Modal창 title 변경
+			$("#replyModalTitle").text("Reply Write");
+			
+			// reply > Form > input Data 지우기
+			replyModal.find("input, textarea").not("#replyNo").val("");		// input 중에서 id = 'replyNo'를 제외 시킨다 [.not(selector)]
+			
+			// replyModal에 있는 입력 항목을 모두 보이게 하기
+			replyModal.find("div.form-control").show();
+			
+			// rno는 사용하지 않기 때문에 rno는 보이지 않게 한다.
+			replyModal.find("#replyRnoDiv").hide();
+			
+			replyModal.modal("show");
+			
+		});
+		
+		// 댓글 모달창의 등록 버튼에 대한 Event처리 : 입력된 Data를 JSON data를 만든 후 Server에 전송
+		$("#replyModalWriteBtn").click(function () {
+			
+			var reply = {};
+			
+			reply.no = $("#replyNo").val();
+			reply.content = $("#replyContent").val();
+			reply.writer = $("#replyWriter").val();
+			reply.pw = $("#replyPw").val();
+			
+			// alert(reply);
+			
+			// alert(JSON.stringify(reply));
+			
+			// Ajax를 이용한 댓글 등록 처리
+			replyService.write(reply, function (result) {		// 등록을 성공했을 때의 처리 함수
+				
+				alert(result);
+			
+				replyModal.modal("hide");
+				
+				showList();		// 등록 후 리스트를 다시 가져오기
+				
+			});			
+			
+		});
+		
+		
+	});	
 	
 </script>
 <title>게시판 글 보기</title>
@@ -178,20 +232,63 @@
      <div class="panel-heading">
       <i class="fa fa-comments fa-fw"></i>
       reply
+      <button class="pull-right btn btn-primary btn-xs" id="writeReplyBtn">new reply</button>
  	 </div>
      <div class="panel-body">
       <ul class="chat">
-       <!-- 데이터가 있는 만큼 반복처리 (li태그 만들어 내기) -->
-       <!-- rno를 표시하지 않고 태그안에 속성으로 숨겨 놓음 data-rno="12" -->
       </ul>
 	 </div>
     </div>
    </div>
   </div>
  <!-- 댓글의 끝 -->
- 
  </div>
  <!-- conatiner의 끝 -->
+ 
+ <!-- Modal - 댓글 쓰기/ 수정 시 사용되는 모달창  -->
+ <div class="modal fade" id="replyModal" role="dialog">
+  <div class="modal-dialog">
+   <div class="modal-content">
+    <div class="modal-header">
+     <button type="button" class="close" data-dismiss="modal">&times;</button>
+     <h4 class="modal-title">
+      <i class="fa fa-comments fa-fw"></i>
+      <span id="replyModalTitle">Reply Modal</span>
+     </h4>
+    </div>
+    <div class="modal-body">
+     <form>
+      <div class="form-group" id="replyNoDiv">
+       <label for="replyNo">번호: </label>
+       <input name="no" type="text" class="form-control" id="replyNo" readonly="readonly" value="${vo.no }">
+      </div>
+      <div class="form-group" id="replyRnoDiv">
+       <label for="replyRno">댓글번호: </label>
+       <input name="rno" type="text" class="form-control" id="replyRno" readonly="readonly">
+      </div>
+      <div class="form-group" id="replyContentDiv">
+       <label for="content">내용:</label>
+       <textarea rows="5" name="content" class="form-control" id="replyContent"></textarea>
+      </div>
+      <div class="form-group" id="replyWriterDiv">
+       <label for="writer">작성자: </label>
+       <input name="writer" type="text" class="form-control" id="replyWriter" required="required" pattern="[A-Za-z가-힣][A-Za-z가-힣0-9]{1,9}">
+      </div>
+      <div class="form-group" id="replyPwDiv">
+       <label for="replyPw">비밀번호: </label>
+       <input name="pw" type="text" class="form-control" id="replyPw" required="required" pattern=".{4,20}">
+      </div>
+     </form>
+    </div>
+    <div class="modal-footer">
+     <button type="button" class="btn btn-default" id="replyModalWriteBtn">등록</button>
+     <button type="button" class="btn btn-default" data-dismiss="modal">취소</button>
+    </div>
+   </div>
+  </div>
+ </div>
+ <!-- Modal - 댓글 쓰기/ 수정 시 사용되는 모달끝  -->
+ 
  <!-- modal - 게시판 글 삭제 시 사용되는 모달 창 -->
  <div class="modal fade" id="delete" role="dialog">
   <div class="modal-dialog">

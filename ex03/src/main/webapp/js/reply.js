@@ -1,5 +1,5 @@
 /**
- * 
+ *  게시판 댓글 처리에 필요한 JS(jQuery)
  */
  
  // 브라우저의 console tab에 출력한다 - alert() 사용해도 무방
@@ -24,7 +24,7 @@
 			// Ajax 함수의 종류 : $.getJson() : $.Ajax()를 통해서 JSON 데이터를 받아 오게 만든 함수
 			$.getJSON(
 			
-				"/replies/list?no=" + no,		// Ajax를 호출하는 URL
+				"/replies/list?no=" + no + "&repPage=" + page + "&repPerPageNum=" + perPageNum,		// Ajax를 호출하는 URL
 				
 				// success(성공) 상태 일때 처리되는 함수
 				
@@ -60,11 +60,79 @@
 		
 		}	// end of list
 		
+		// write()==========================================================================================
+		function write(reply, callback, error) {		// 책에서는 add()
+			
+			console.log("reply write() --------------------------------------------------------");
+			console.log("reply data : " + JSON.stringify(reply));
+			
+			// Ajax를 이용해서 Data를 Server에 보내준다.
+			$.ajax({
+				
+				type : "post",		// 전송 방법의 Type : get, post, put, patch
+				
+				url : "/replies/write",	// 요청 URL
+				
+				data : JSON.stringify(reply),		// 넘어오는 data를 k = v로 바꿔주는 함수
+				
+				contentType : "application/json; charset=UTF-8",	// 전송되는 data의 type과 encoding type
+				
+				success : function(result, status, xhr) {		// 정상적으로 댓글 쓰기 성공했을 때의 처리함수.
+					
+					if(callback) {
+						
+						callback(result);
+						
+					} else {
+						
+						alert("댓글 쓰기 성공");
+						
+					}
+					
+				},
+				
+				error : function() {		// 처리도중 오류(실패)가 발생한 경우 처리하는 함수
+					
+					if(error) {
+						
+						error(xhr, status, err);
+						
+					} else {
+						
+						alert("댓글 쓰기 중 오류가 발생하였습니다.");
+						
+					}
+					
+				}
+				
+			});	// end of $.ajax()
+			
+			
+			
+		}	// end of write
+		
+		// update() ========================================================================================
+		function update(reply, callback, error) {
+			
+			console.log("reply update() --------------------------------------------------------");
+			
+		}	// end of update
+		
+		// deleteReply()) ==========================================================================================		delete가 예약어 이므로 변수나 함수로 사용할 수 없다.
+		function deleteReply(reply, callback, error) {
+			
+			console.log("reply deleteReply() --------------------------------------------------------");
+			
+		}	// end of deleteReply
+		
+		
 		return {
 
 			list : list,		// replyServic.list(param, callback, error)
-			
-			displayTime : displayTime
+			write : write,
+			update : update,
+			delete : deleteReply,
+			displayTime : displayTime		// util.js 파일에서 displayTime 함수를 찾는다. reply.js보다 앞에 있어야 찾을 수 있다.
 			
 		}
 		

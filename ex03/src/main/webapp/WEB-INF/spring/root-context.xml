@@ -25,8 +25,8 @@
 		<property name="jdbcUrl"
 			value="jdbc:log4jdbc:oracle:thin:@localhost:1521:xe" />
 		
-		<property name="username" value="java01" />
-		<property name="password" value="java01" />
+		<property name="username" value="java00" />
+		<property name="password" value="java00" />
 	</bean>
 	
 	<!-- HikariCP 사용 객체 -->
