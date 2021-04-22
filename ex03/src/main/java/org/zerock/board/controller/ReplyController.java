@@ -34,7 +34,10 @@ public class ReplyController {
 	private ReplyService service;
 	
 	// 1. 게시판 리스트
-	@GetMapping(value =  "/list", produces = { MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_UTF8_VALUE })
+	@GetMapping(value =  "/list", produces = { 
+			MediaType.APPLICATION_XML_VALUE
+			,MediaType.APPLICATION_JSON_UTF8_VALUE 
+			})
 	// @ModelAttribute : 전달 받은 변수의 값을 model에 담아서 JSP까지 보낸다 => 변수 이름으로 사용한다.
 	// ResponseEntity : 실행 코드와 함께 크라이언트에게 전달할 때 사용
 	public ResponseEntity<List<ReplyVO>> list( @RequestParam(defaultValue = "1") long repPage, @RequestParam(defaultValue = "5") long repPerPageNum, long no) throws Exception {
