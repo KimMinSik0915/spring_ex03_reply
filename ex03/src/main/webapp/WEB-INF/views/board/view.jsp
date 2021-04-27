@@ -30,6 +30,12 @@
 		
 	}
 	
+	ul.chat > li {
+	
+		margin-bottom: 15px;	
+	
+	}
+	
 </style>
 <script type="text/javascript">
 
@@ -122,6 +128,10 @@
 						        str +=  "<small class='pull-right text-muted' >"+ replyService.displayTime(list[i].writeDate) + "</small>";		// class=muted : 글자색을 회색으로 만들어 주는 BS, CSS
 						        str += "</div>";
 						        str += "<p><pre style='background: none;'>" + list[i].content + "</pre></p>";
+						        str += "<div class='text-right'>";
+						        str += "<button class='btn btn-default btn-xs replyUpdateBtn'>수정</button>";
+						        str += "<button class='btn btn-default btn-xs replyDeleteBtn'>삭제</button>";
+					        	str += "</div>";
 						        str += "</div>";
 						        str += "</li>";
 								
@@ -186,6 +196,30 @@
 			
 		});
 		
+		// 댓글 수정 : Modal(replyModal) --------------------------------------------------------------------------------------
+		$(".chat").on("click", ".replyUpdateBtn", function() {
+			
+			alert("click");
+			
+			replyModal.modal("show");
+			
+		});
+		
+		
+		// 댓글 삭제 : Modal(replyModal) --------------------------------------------------------------------------------------
+		$(".chat").on("click", ".replyDeleteBtn", function() {
+			
+			alert("click");
+			
+			replyModal.modal("show");
+			
+		});
+		
+// 		$(".chat").find(".replyDeleteBtn").click(function () {
+			
+// 			alert("click");
+			
+// 		}); 사용할 수 없다.
 		
 	});	
 	
@@ -236,6 +270,17 @@
  	 </div>
      <div class="panel-body">
       <ul class="chat">
+       <li>
+        <div class="header">
+		 <strong class="primary-font">user00</strong>
+		 <small class="pull-right text-muted">2021.04.21 14:12</small>
+		</div>
+		<p>Good job!</p>
+        <div class="text-right">
+         <button class="btn btn-default btn-xs replyUpdateBtn">수정</button>
+         <button class="btn btn-default btn-xs replyDeleteBtn">삭제</button>
+        </div>
+       </li>
       </ul>
 	 </div>
     </div>
