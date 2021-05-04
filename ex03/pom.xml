@@ -8,15 +8,14 @@
 	<name>ex03</name>
 	<packaging>war</packaging>
 	<version>1.0.0-BUILD-SNAPSHOT</version>
-
 	<properties>
 		<junit-version>4.12</junit-version>
 		<java-version>1.8</java-version>
 		<org.springframework-version>5.0.7.RELEASE</org.springframework-version>
-		<org.aspectj-version>1.6.10</org.aspectj-version>
-		<org.slf4j-version>1.6.6</org.slf4j-version>
-		<!-- project의 절대 위치를 property로 설정 -->
-		<project.basedir>D:/MS/workspace/Spring/ex03</project.basedir>
+		<org.aspectj-version>1.9.0</org.aspectj-version>
+		<org.slf4j-version>1.7.25</org.slf4j-version>
+		<!-- project 절대 위치를 property로 설정 - 본인의 위치 -->
+		<project.basedir>D:/leeyh/workspace/spring/ex03</project.basedir>
 	</properties>
 	<dependencies>
 		<!-- Spring -->
@@ -25,7 +24,7 @@
 			<artifactId>spring-context</artifactId>
 			<version>${org.springframework-version}</version>
 			<exclusions>
-				<!-- Exclude Commons Logging in favor of SLF 4j -->
+				<!-- Exclude Commons Logging in favor of SLF4j -->
 				<exclusion>
 					<groupId>commons-logging</groupId>
 					<artifactId>commons-logging</artifactId>
@@ -121,15 +120,7 @@
 			<version>1.18.20</version>
 			<scope>provided</scope>
 		</dependency>
- 
-		<!-- 페이지 처리 -->
-		<dependency>
-			<groupId>com.webjjang</groupId>
-			<artifactId>util.pageObject</artifactId>
-			<version>2.5</version>
-			<scope>system</scope>
-			<systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/pageObject.jar</systemPath>
-		</dependency>
+
 
 		<!-- DB 관련 -->
 		<!-- 오라클 드라이버 : maven.org에 새롭게 등록이 되어 있다. -->
@@ -181,18 +172,18 @@
 			<version>2.9.6</version>
 		</dependency>
 
-		<!-- xml 데이터 처리 -->
-		<dependency>
-			<groupId>com.fasterxml.jackson.dataformat</groupId>
-			<artifactId>jackson-dataformat-xml</artifactId>
-			<version>2.9.6</version>
-		</dependency>
-
-		<!-- GSON 데이터 처리 : JAVA 직접 JSON 데이터 변경을 위해서 사용하는 library -->
+		<!-- GSON 데이터 처리 - JAVA 직접 JSON데이터 변경 -->
 		<dependency>
 			<groupId>com.google.code.gson</groupId>
 			<artifactId>gson</artifactId>
 			<version>2.8.6</version>
+		</dependency>
+
+		<!-- XML 데이터 처리 -->
+		<dependency>
+			<groupId>com.fasterxml.jackson.dataformat</groupId>
+			<artifactId>jackson-dataformat-xml</artifactId>
+			<version>2.9.6</version>
 		</dependency>
 
 		<!-- 파일 업로드 -->
@@ -202,7 +193,14 @@
 			<version>1.3.3</version>
 		</dependency>
 
-
+		<!-- 페이지 처리 -->
+		<dependency>
+			<groupId>com.webjjang</groupId>
+			<artifactId>util.PageObject</artifactId>
+			<version>2.5</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/pageObject.jar</systemPath>
+		</dependency>
 
 	</dependencies>
 
@@ -245,3 +243,4 @@
 		</plugins>
 	</build>
 </project>
+	

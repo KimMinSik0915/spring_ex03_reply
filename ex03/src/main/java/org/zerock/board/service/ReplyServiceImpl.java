@@ -32,6 +32,9 @@ public class ReplyServiceImpl implements ReplyService {
 		
 		log.info("list() [no] : " + no);
 		
+		// 게시판 글 번호에 맞는 전체 데이터 개수 가져오기
+		pageObject.setTotalRow(mapper.getTotalRow(no));
+		
 		// Mybatis에서 parameter로 한개만 받으므로 하나로 묶어준다.
 		Map<String, Object> map = new HashMap<>();
 		

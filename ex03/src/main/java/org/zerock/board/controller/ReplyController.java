@@ -1,7 +1,9 @@
 package org.zerock.board.controller;
 
 import java.net.URLEncoder;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -41,13 +43,25 @@ public class ReplyController {
 			})
 	// @ModelAttribute : 전달 받은 변수의 값을 model에 담아서 JSP까지 보낸다 => 변수 이름으로 사용한다.
 	// ResponseEntity : 실행 코드와 함께 크라이언트에게 전달할 때 사용
-	public ResponseEntity<List<ReplyVO>> list( @RequestParam(defaultValue = "1") long repPage, @RequestParam(defaultValue = "5") long repPerPageNum, long no) throws Exception {
+//	public ResponseEntity<List<ReplyVO>> list( @RequestParam(defaultValue = "1") long repPage, @RequestParam(defaultValue = "5") long repPerPageNum, long no) throws Exception {
+	public ResponseEntity<Map<String, Object>> list( @RequestParam(defaultValue = "1") long repPage, @RequestParam(defaultValue = "5") long repPerPageNum, long no) throws Exception {
+		
+		// 리턴 객체 선언
+		Map<String, Object> map = new HashMap<>();
 		
 		PageObject replyPageObject = new PageObject(repPage, repPerPageNum);
 		
 		log.info(" list() [replyPageObjcet] : " + replyPageObject);		
 		
-		return new ResponseEntity<>(service.list(no, replyPageObject), HttpStatus.OK);
+		log.info(" list() [no] : " + no);		
+		
+		map.put("pageObject", replyPageObject);
+		
+		map.put("list", service.list(no, replyPageObject));
+		
+		// return new ResponseEntity<>(service.list(no, replyPageObject), HttpStatus.OK);
+		
+		return new ResponseEntity<>(map, HttpStatus.OK);
 		
 	}
 	
@@ -70,49 +84,57 @@ public class ReplyController {
 	// 4. 게시판 수정 FORM : /board/view에 포함
 	
 	// 4-1 게시판 수정 처리
-	@PatchMapping("/update")
-	public String update(ReplyVO vo, RedirectAttributes rttr, @ModelAttribute PageObject pageObject) throws Exception {
+	@PatchMapping(value = "/update", consumes = { MediaType.APPLICATION_JSON_UTF8_VALUE }, produces = { "application/text; charset=utf-8" })
+	public ResponseEntity<String> update( @RequestBody ReplyVO vo) throws Exception {
 		
 		
 		log.info(vo + " update() -------------------------------");
 		
 		int result = service.update(vo);
 		
+		// 전달되는 데이터의 선언
+		String msg= "게시판 글 수정이 성공적으로 되었습니다.";
+		
+		HttpStatus status = HttpStatus.OK;
+		
 		if(result == 0) {
 			
-			rttr.addFlashAttribute("msg", "비밀번호가 맞지 않습니다. 비밀번호를 확인해 주세요");
+			msg = "게시판 수정 실패 - 정보를 확인해 주새요";
 			
-		} else {
-			
-			rttr.addFlashAttribute("msg", "글 수정이 완료되었습니다.");
+			status = HttpStatus.NOT_MODIFIED;
 			
 		}
 		
-		log.info(result + " update() -------------------------------");
+		log.info("update().msg : " + msg);
 		
 		// URL로 요청되는 경우 서버의 한글이 적용되므로 UTF-8로 encode 시켜서 보내야 한다.
-		return  "redirect:view.do?no=" + vo.getNo() + "&inc=0&page=" + pageObject.getPage() + "&perPageNum=" + pageObject.getPerPageNum() + "&key=" + pageObject.getKey() + "&word=" + URLEncoder.encode(pageObject.getWord(), "UTF-8") ;
+		return new ResponseEntity<String>(msg, status);
 		
 	}
 	
 	// 5. 게시판 삭제
-	@DeleteMapping("/delete")
-	public String delete(ReplyVO vo, RedirectAttributes rttr, int perPageNum) throws Exception {
+	@DeleteMapping( value = "/delete", consumes = { MediaType.APPLICATION_JSON_UTF8_VALUE }, produces = { "application/text; charset=utf-8" } )
+	public ResponseEntity<String> delete( @RequestBody ReplyVO vo) throws Exception {
 		
 		int result =  service.delete(vo);
 		
+		// 전달되는 데이터의 선언
+		String msg= "댓글 삭제가 성공적으로 되었습니다.";
+		
+		HttpStatus status = HttpStatus.OK;
+		
 		if(result == 0) {
 			
-			rttr.addFlashAttribute("msg", "비밀번호가 맞지 않습니다. 비밀번호를 확인해 주세요");
+			msg = "댓글 삭제 실패 - 정보를 확인해 주새요";
 			
-			return  "redirect:view.do?no=" + vo.getNo() + "&inc=0";
+			status = HttpStatus.NOT_MODIFIED;
 			
-		} else {
-			
-			rttr.addFlashAttribute("msg", "글 삭제가 완료되었습니다.");
-			
-			return "redirect:list.do?perPageNum=" + perPageNum;
 		}
+		
+		log.info("update().msg : " + msg);
+		
+		// URL로 요청되는 경우 서버의 한글이 적용되므로 UTF-8로 encode 시켜서 보내야 한다.
+		return new ResponseEntity<String>(msg, status);
 		
 		
 	}

@@ -116,12 +116,80 @@
 			
 			console.log("reply update() --------------------------------------------------------");
 			
+			$.ajax({
+				
+				type : 'patch',	// replyController와 맞추어 주어야 한다.
+				url : "/replies/update",
+				data : JSON.stringify(reply),
+				contentType : "application/json; charset=UTF-8",
+				success : function(result, status, xhr) {
+					
+					if(callback) {
+						
+						callback(result, status);
+						
+					} else {
+						
+						alert("수정에 성공하여습니다 - 새로 고침 하세요");
+						
+					}
+					
+				}, error : function(xhr, status, err) {
+					
+					if(error) {
+						
+						error(err, status);
+						
+					} else {
+						
+						alert(err);
+						
+					}
+					
+				}
+				
+			});
+			
 		}	// end of update
 		
-		// deleteReply()) ==========================================================================================		delete가 예약어 이므로 변수나 함수로 사용할 수 없다.
+		// deleteReply() ==========================================================================================		delete가 예약어 이므로 변수나 함수로 사용할 수 없다.
 		function deleteReply(reply, callback, error) {
 			
 			console.log("reply deleteReply() --------------------------------------------------------");
+			
+			$.ajax({
+				
+				type : "delete",
+				url : "/replies/delete",
+				data : JSON.stringify(reply),
+				contentType : "application/json; charset=UTF-8",
+				success : function(result, status, xhr) {
+					
+					if(callback) {
+						
+						callback(result, status);
+						
+					} else {
+						
+						alert("댓글 삭제 완료 - 새로고침 하세요");
+						
+					}
+					
+				}, error : function(xhr, status, err) {
+					
+					if(error) {
+						
+						error(err);
+						
+					} else {
+						
+						alert(err);
+						
+					}
+					
+				}
+				
+			});			
 			
 		}	// end of deleteReply
 		

@@ -81,4 +81,122 @@ function displayTime(timeStemp) {
 	}
 	
 }
- 
+
+// Ajax를 이용한 댓글이나 게시판 리스트의 pagination (li tag만 만든다.)
+// data한개당 li - a - data 선택된 page는 class='active'로 지정 모든 li 태그에는 class='ajax_page'
+// 넘오는 데이터는 pageObject = {"page":1, "perPageNum":5} JSON -> pageObject.page
+// rufrhksms pagination의 ul tag 안에 들어갈 li tag들을 문자열로 넘겨준다.
+function ajaxPage(pageObject) {
+	
+	var str = "";	// tag를 만들어서 저장할 변수
+	
+	// 1 페이지로 이동시키는 버튼
+	str += "<li data-page=1 class='reply_nav_li'>";
+	
+	if(pageObject.page > 1) {
+		
+		str += "  		<a href='' onclick='return false' title='click to move first page!' data-toggle='tooltip' data-placement='top' class='move' >";
+		str += "  			<i class='glyphicon glyphicon-fast-backward'></i>";
+		str += "  		</a>";
+		
+	} else {	// page <= 1
+		
+		str += "  		<a href='' onclick='return false' title='no move page!'  data-toggle='tooltip' data-placement='top' >";
+		str += "  			<i class='glyphicon glyphicon-fast-backward' style='color: #999';></i>";
+		str += "  		</a>";
+		
+	}
+		
+	str += "</li>"
+	
+	// 이전 group의 페이지로 이동시키기
+	
+	str +=	"<li data-page=" + pageObject.startPage + " class='reply_nav_li' >";
+	
+	if(pageObject.startPage > 1) {
+		
+		str +=	"<a href='' onclick='return false' title='click to move previous page group!' data-toggle='tooltip' data-placement='top' class='move' >";
+		str +=	"<i class='glyphicon glyphicon-step-backward'></i>";
+		str +=	"</a>";
+		
+		
+	} else {
+		
+		str += "<a href='' onclick='return false' title='no move page!'data-toggle='tooltip' data-placement='top' >";
+  		str += 	"<i class='glyphicon glyphicon-step-backward' style='color: #999';></i>";
+  		str += "</a>";
+		
+	}
+	  		
+  	str += "</li>";
+	  		
+	// startpage ~ endPage 버튼 만들기
+	for( i = pageObject.startPage; i <= pageObject.endPage; i++) {
+		
+		str +=	 "<li data-page='" + i + "' class='reply_nav_li ";
+	
+		if(pageObject.page == i) {
+			
+			str += "active";
+			
+		}
+		
+		str += "'>'";
+		
+		if(pageObject.page == i) {
+			
+			str += "<a href='' onclick='return false' >" + i + "</a>";
+			
+		} else {
+			
+			str += "<a href='' onclick='return false' title='click to move " + i + " page' data-toggle='tooltip' data-placement='top' class='move' >" + i + "</a>";
+			
+		}
+		
+		str += "</li>";
+		
+	}
+	  		
+	  		
+	// 다음 group으로 이동 : page를 endPage + 1로 이동시킨다. endpage == totalPage 이동 불가
+	str += "<li data-page='" + (pageObject.endPage + 1) + "' class='reply_nav_li'>";
+	
+	if(pageObject.endPage < pageObject.totalPage) {	// endPage != totalPage : 이동 가능
+		
+		str += "<a href='' onclick='return false' title='click to move next page group!' data-toggle='tooltip' data-placement='top' class='move' >";
+		str += "<i class='glyphicon glyphicon-step-forward'></i>";
+		str += "</a>";
+		
+	} else {	// endPage == totalPage : 이동 불가
+		
+		str += "<a href='' onclick='return false' title='no move page!'data-toggle='tooltip' data-placement='top'>";
+		str += "<i class='glyphicon glyphicon-step-forward' style='color: #999;'></i>";
+		str += "</a>";
+			
+	}
+	
+	str += "</li>";
+	
+	// 마지막 페이지로 이동 시키기 : totalPage로 이동 시킨다. page == totalPage 이동 불가.
+	str += "<li data-page=" + pageObject.totalPage + " class='reply_nav_li' >";
+	  
+	if(pageObject.page < pageObject.totalPage) {
+		
+		str += "<a href='' onclick='return false' title='click to move last page!' data-toggle='tooltip' data-placement='top' class='move' >";
+		str += "<i class='glyphicon glyphicon-fast-forward'></i>";
+  		str += "</a>";
+		
+	} else {
+		
+		str += "<a href='' onclick='return false' title='no move page!'data-toggle='tooltip' data-placement='top' >";
+		str += "<i class='glyphicon glyphicon-fast-forward' style='color: #999;'></i>";
+		str += "</a>";
+		
+	}
+	  		
+	str += "</li>";
+	
+	  		
+	return str;
+	
+}

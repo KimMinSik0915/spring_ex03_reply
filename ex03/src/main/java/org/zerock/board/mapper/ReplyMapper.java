@@ -13,7 +13,7 @@ public interface ReplyMapper {
 	public List<ReplyVO> list(Map<String, Object> map) throws Exception;
 	
 	// 1-1 댓글 전체 데이터 가져오기 : Page 처리르 위해서
-	public long getTotalRow() throws Exception;
+	public long getTotalRow(long no) throws Exception;
 	
 	// 2. 댓글 보기 생략 (List에 표시가 되므로)
 	
